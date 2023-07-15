@@ -1,0 +1,20 @@
+using (StreamReader reader = new StreamReader(".\\" + proxyFileName))
+{
+    string line;
+    while ((line = reader.ReadLine()) != null)
+    {
+        string[] parse = line.Split('#');
+        if (parse[0] == path)
+        {
+            target = parse[1];
+            break;
+        }
+    }
+    if (target.Contains("Proxy-"))
+    {
+        proxyFileName = target;
+        continue;
+    }
+    else
+        break;
+}
