@@ -1,0 +1,51 @@
+namespace webserver
+{
+    using System;
+    using System.Net;
+    using System.Text;
+    
+    class SimpleWebServer
+    {
+        static void Main()
+        {
+            // 웹 서버 주소와 포트 설정
+            string serverIP = "127.0.0.1";
+            int serverPort = 8080;
+
+            // HttpListener 생성 및 시작
+            var listener = new HttpListener();
+            listener.Prefixes.Add($"http://{serverIP}:{serverPort}/");
+            listener.Start();
+            Console.WriteLine("웹 서버 시작");
+
+            // 요청 대기 및 처리
+            while (true)
+            {
+                // 요청 수신
+                var context = listener.GetContext();
+                var request = context.Request;
+                var response = context.Response;
+
+                // 요청 정보 출력
+                Console.WriteLine($"요청 메서드: {request.HttpMethod}");
+                Console.WriteLine($"요청 URL: {request.Url}");
+
+                // 응답 데이터 생성
+                string responseText = "안녕하세요, 웹 서버!";
+                byte[] responseBytes = Encoding.UTF8.GetBytes(responseText);
+
+                // 응답 전송
+                response.StatusCode = 200;
+                response.ContentType = "text/plain";
+                response.ContentLength64 = responseBytes.Length;
+                response.OutputStream.Write(responseBytes, 0, responseBytes.Length);
+                response.OutputStream.Close();
+            }
+
+            // 서버 중지
+            listener.Stop();
+            Console.WriteLine("웹 서버 종료");
+        }
+    }
+}
+
