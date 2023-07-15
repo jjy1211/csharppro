@@ -1,0 +1,58 @@
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+
+public class MyObject
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public List<string> Items { get; set; }
+}
+
+public string CreateJsonObjectWithArray()
+{
+    MyObject myObject = new MyObject
+    {
+        Id = 1,
+        Name = "Example",
+        Items = new List<string> { "Item 1", "Item 2", "Item 3" }
+    };
+
+    string jsonString = JsonConvert.SerializeObject(myObject);
+    return jsonString;
+}
+
+//or
+  JObject result = new JObject(
+            new JProperty("result", resultStr)
+          );
+
+//array
+public class outURL
+{
+    public List<string> result { get; set; }
+}
+outURL resJson = new outURL
+{
+    result = new List<string> { }
+};
+for (int j = 0; j < outResult.Count; j++)
+{
+    resJson.result.Add(outResult[j]);
+}
+string re = JsonConvert.SerializeObject(resJson);
+    
+//use
+string jsonObject = CreateJsonObjectWithArray();
+Console.WriteLine(jsonObject);
+
+//output
+{
+  "Id": 1,
+  "Name": "Example",
+  "Items": [
+    "Item 1",
+    "Item 2",
+    "Item 3"
+  ]
+}
