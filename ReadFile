@@ -1,0 +1,23 @@
+        static string ReadFile(string filePath)
+        {
+            try
+            {
+                // 파일을 읽기 위해 StreamReader를 사용합니다.
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    // 파일의 모든 내용을 문자열로 읽어옵니다.
+                    string content = reader.ReadToEnd();
+                    return content;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("파일을 찾을 수 없습니다.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("파일 읽기 오류: " + ex.Message);
+            }
+
+            return null;
+        }
