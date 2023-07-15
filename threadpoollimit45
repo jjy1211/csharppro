@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+
+namespace threadpoollimit45
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 최대 2개의 스레드를 동시에 실행하기 위한 Semaphore 객체 생성
+            Semaphore semaphore = new Semaphore(2, 2);
+
+            // 스레드 완료를 추적하기 위한 카운터 변수
+            int completedThreads = 0;
+
+            // 10번의 스레드 호출
+            for (int i = 0; i < 10; i++)
+            {
+                ThreadPool.QueueUserWorkItem(state =>
+                {
+                    semaphore.WaitOne(); // 스레드 실행 전에 세마포어 획득
+
+                    try
+                    {
+                        // 스레드 동작
+                        Console.WriteLine("스레드 {0} 동작 중...", Thread.CurrentThread.ManagedThreadId);
+
+                        // 스레드 실행 시간이라고 가정하기 위해 1초간 대기
+                        Thread.Sleep(1000);
+
+                        Console.WriteLine("스레드 {0} 종료", Thread.CurrentThread.ManagedThreadId);
+                    }
+                    finally
+                    {
+                        semaphore.Release(); // 스레드 종료 후에 세마포어 반환
+                        Interlocked.Increment(ref completedThreads); // 완료된 스레드 카운트 증가
+                    }
+                });
+            }
+
+            // 모든 스레드 실행이 완료될 때까지 대기
+            while (completedThreads < 10)
+            {
+                Thread.Sleep(100);
+            }
+
+            Console.WriteLine("모든 스레드 실행 완료");
+        }
+    }
+}
